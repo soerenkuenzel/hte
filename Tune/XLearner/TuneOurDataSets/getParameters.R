@@ -5,8 +5,9 @@
 ################################################################################
 library(dplyr)
 ## read in the data as list for MSE
-file_folder_MSE <- "Tune/XLearner/sim_data/sim_data_MSE/"
-file_folder_CI <- "Tune/XLearner/sim_data/sim_data_CI/"
+file_folder_MSE <- "Tune/XLearner/TuneOurDataSets/sim_data/sim_data_MSE/"
+file_folder_CI <- "Tune/XLearner/TuneOurDataSets/sim_data/sim_data_CI/"
+file_folder_ACIC <- "Tune/XLearner/TuneACIC16/sim_data/"
 
 file_list_MSE <- list()
 i <- 1
@@ -26,7 +27,16 @@ for(file in dir(file_folder_CI)){
   file_list_CI[[i]] <- tbl_df(read.csv(paste0(file_folder_CI, file), as.is = TRUE))
   i <- i + 1
 }
-
+## read in the data as list for ACIC
+file_list_ACIC <- list()
+i <- 1
+for(file in dir(file_folder_ACIC)){
+  print(file)
+  if(substr(file, 1,3) == "old") next
+  if(substr(file, 1,3) == "old") next
+  file_list_ACIC[[i]] <- tbl_df(read.csv(paste0(file_folder_ACIC, file), as.is = TRUE))
+  i <- i + 1
+}
 
 ################################################################################
 # SAVE BEST SETTING IN --> starting_values
@@ -50,6 +60,20 @@ for (file in file_list_CI) {
 
   best_setups <- rbind(best_setups, file[1, -c(25, 26) ])
 }
+
+load(file = "R/sysdata.rda", verbose = TRUE)
+all.equal(starting_values, as.data.frame(best_setups))
+
+
+for (i in 2:length(file_list_ACIC)){
+  print(i)
+  file = file_list_ACIC[[i]]
+  # file = file_list_ACIC[[3]]
+  file <- file[order(as.numeric(as.data.frame(file)[, 25])),]
+  file$setup <- paste0(file$setup, "_ACIC")
+  best_setups <- rbind(best_setups, file[1, -25])
+}
+
 starting_values <- as.data.frame(best_setups)
 devtools::use_data(starting_values, internal = TRUE, overwrite = TRUE)
 # This will save the data in R/sysdata.rda and will only be available for our
