@@ -73,11 +73,11 @@ knitr::include_graphics("../Tune/adaptivityfigue2017-04-19.png")
 
 ## Performance comparison to other CATE estimators
 ```{r, out.width = "690px", echo = FALSE}
-knitr::include_graphics("../tests/performance/CATEestimators/sim_figures/singleplot_complexTaudim20a0.png")
-knitr::include_graphics("../tests/performance/CATEestimators/sim_figures/singleplot_Wager1dim20a0.png")
-knitr::include_graphics("../tests/performance/CATEestimators/sim_figures/singleplot_RsparseT2weakdim20a0.png")
-knitr::include_graphics("../tests/performance/CATEestimators/sim_figures/singleplot_Wager3dim20a0.png")
-knitr::include_graphics("../tests/performance/CATEestimators/sim_figures/singleplot_Usual1dim20a0.png")
+# knitr::include_graphics("../tests/performance/CATEestimators/sim_figures/singleplot_complexTaudim20a0.png")
+# knitr::include_graphics("../tests/performance/CATEestimators/sim_figures/singleplot_Wager1dim20a0.png")
+# knitr::include_graphics("../tests/performance/CATEestimators/sim_figures/singleplot_RsparseT2weakdim20a0.png")
+# knitr::include_graphics("../tests/performance/CATEestimators/sim_figures/singleplot_Wager3dim20a0.png")
+# knitr::include_graphics("../tests/performance/CATEestimators/sim_figures/singleplot_Usual1dim20a0.png")
 ```
 
 
