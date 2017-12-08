@@ -1,5 +1,5 @@
-#ifndef HTECPP_DATAFRAME_H
-#define HTECPP_DATAFRAME_H
+#ifndef FORESTRYCPP_DATAFRAME_H
+#define FORESTRYCPP_DATAFRAME_H
 
 #include <iostream>
 #include <vector>
@@ -14,28 +14,28 @@ public:
   virtual ~DataFrame();
 
   DataFrame(
-    std::unique_ptr< std::vector< std::vector<double> > > featureData,
-    std::unique_ptr< std::vector<double> > outcomeData,
+    std::unique_ptr< std::vector< std::vector<float> > > featureData,
+    std::unique_ptr< std::vector<float> > outcomeData,
     std::unique_ptr< std::vector<size_t> > categoricalFeatureCols,
     std::size_t numRows,
     std::size_t numColumns
   );
 
-  double getPoint(size_t rowIndex, size_t colIndex);
+  float getPoint(size_t rowIndex, size_t colIndex);
 
-  double getOutcomePoint(size_t rowIndex);
+  float getOutcomePoint(size_t rowIndex);
 
-  std::vector<double>* getFeatureData(size_t colIndex);
+  std::vector<float>* getFeatureData(size_t colIndex);
 
-  void getObservationData(std::vector<double> &rowData, size_t rowIndex);
+  void getObservationData(std::vector<float> &rowData, size_t rowIndex);
 
-  double partitionMean(std::vector<size_t>* sampleIndex);
+  float partitionMean(std::vector<size_t>* sampleIndex);
 
-  std::vector< std::vector<double> >* getAllFeatureData() {
+  std::vector< std::vector<float> >* getAllFeatureData() {
     return _featureData.get();
   }
 
-  std::vector<double>* getOutcomeData() {
+  std::vector<float>* getOutcomeData() {
     return _outcomeData.get();
   }
 
@@ -52,12 +52,12 @@ public:
   }
 
 private:
-  std::unique_ptr< std::vector< std::vector<double> > > _featureData;
-  std::unique_ptr< std::vector<double> > _outcomeData;
+  std::unique_ptr< std::vector< std::vector<float> > > _featureData;
+  std::unique_ptr< std::vector<float> > _outcomeData;
   std::unique_ptr< std::vector<size_t> > _categoricalFeatureCols;
   std::size_t _numRows;
   std::size_t _numColumns;
 };
 
 
-#endif //HTECPP_DATAFRAME_H
+#endif //FORESTRYCPP_DATAFRAME_H

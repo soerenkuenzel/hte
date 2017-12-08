@@ -112,8 +112,8 @@ void honestRFTree::setDummyTree(
 }
 
 void honestRFTree::predict(
-  std::vector<double> &outputPrediction,
-  std::vector< std::vector<double> >* xNew,
+  std::vector<float> &outputPrediction,
+  std::vector< std::vector<float> >* xNew,
   DataFrame* trainingData
 ){
 
@@ -161,7 +161,7 @@ void splitDataIntoTwoParts(
   DataFrame* trainingData,
   std::vector<size_t>* sampleIndex,
   size_t splitFeature,
-  double splitValue,
+  float splitValue,
   std::vector<size_t>* leftPartitionIndex,
   std::vector<size_t>* rightPartitionIndex,
   bool categoical
@@ -180,7 +180,6 @@ void splitDataIntoTwoParts(
       }
     } else {
       // Non-categorical, split to left (<) and right (>=) according to the
-
       if ((*trainingData).getPoint(*it, splitFeature) < splitValue) {
         (*leftPartitionIndex).push_back(*it);
       } else {
@@ -195,7 +194,7 @@ void splitData(
   std::vector<size_t>* averagingSampleIndex,
   std::vector<size_t>* splittingSampleIndex,
   size_t splitFeature,
-  double splitValue,
+  float splitValue,
   std::vector<size_t>* averagingLeftPartitionIndex,
   std::vector<size_t>* averagingRightPartitionIndex,
   std::vector<size_t>* splittingLeftPartitionIndex,
@@ -243,8 +242,8 @@ void honestRFTree::recursivePartition(
 
   // Select best feature
   size_t bestSplitFeature;
-  double bestSplitValue;
-  double bestSplitLoss;
+  float bestSplitValue;
+  float bestSplitLoss;
 
   selectBestFeature(
     bestSplitFeature,
@@ -257,7 +256,7 @@ void honestRFTree::recursivePartition(
     random_number_generator,
     splitMiddle
   );
-
+  
   // Create a leaf node if the current bestSplitValue is NA
   if (std::isnan(bestSplitValue)) {
     // Create two lists on heap and transfer the owernship to the node
@@ -298,7 +297,6 @@ void honestRFTree::recursivePartition(
         bestSplitFeature
       ) != categorialCols.end()
     );
-
     // Update sample index for both left and right partitions
     // Recursively grow the tree
     std::unique_ptr< RFNode > leftChild ( new RFNode() );
@@ -331,12 +329,12 @@ void honestRFTree::recursivePartition(
 }
 
 void updateBestSplit(
-  double* bestSplitLossAll,
-  double* bestSplitValueAll,
+  float* bestSplitLossAll,
+  float* bestSplitValueAll,
   size_t* bestSplitFeatureAll,
   size_t* bestSplitCountAll,
-  double currentSplitLoss,
-  double currentSplitValue,
+  float currentSplitLoss,
+  float currentSplitValue,
   size_t currentFeature,
   size_t bestSplitTableIndex,
   std::mt19937_64& random_number_generator
@@ -356,8 +354,8 @@ void updateBestSplit(
         bestSplitCountAll[bestSplitTableIndex] + 1;
 
       // Only update with probability 1/nseen
-      std::uniform_real_distribution<double> unif_dist;
-      double tmp_random = unif_dist(random_number_generator);
+      std::uniform_real_distribution<float> unif_dist;
+      float tmp_random = unif_dist(random_number_generator);
       if (tmp_random * bestSplitCountAll[bestSplitTableIndex] <= 1) {
         bestSplitLossAll[bestSplitTableIndex] = currentSplitLoss;
         bestSplitFeatureAll[bestSplitTableIndex] = currentFeature;
@@ -372,8 +370,8 @@ void findBestSplitValueCategorical(
   std::vector<size_t>* splittingSampleIndex,
   size_t bestSplitTableIndex,
   size_t currentFeature,
-  double* bestSplitLossAll,
-  double* bestSplitValueAll,
+  float* bestSplitLossAll,
+  float* bestSplitValueAll,
   size_t* bestSplitFeatureAll,
   size_t* bestSplitCountAll,
   DataFrame* trainingData,
@@ -383,8 +381,8 @@ void findBestSplitValueCategorical(
 ){
 
   // Count total number of observations for different categories
-  std::set<double> all_categories;
-  double splitTotalSum = 0;
+  std::set<float> all_categories;
+  float splitTotalSum = 0;
   size_t splitTotalCount = 0;
   size_t averageTotalCount = 0;
 
@@ -404,12 +402,12 @@ void findBestSplitValueCategorical(
   }
 
   // Create map to track the count and sum of y squares
-  std::map<double, size_t> splittingCategoryCount;
-  std::map<double, size_t> averagingCategoryCount;
-  std::map<double, double> splittingCategoryYSum;
+  std::map<float, size_t> splittingCategoryCount;
+  std::map<float, size_t> averagingCategoryCount;
+  std::map<float, float> splittingCategoryYSum;
 
   for (
-    std::set<double>::iterator it=all_categories.begin();
+    std::set<float>::iterator it=all_categories.begin();
     it != all_categories.end();
     ++it
     ) {
@@ -419,23 +417,23 @@ void findBestSplitValueCategorical(
   }
 
   for (size_t j=0; j<(*splittingSampleIndex).size(); j++) {
-    double currentXValue = (*trainingData).
+    float currentXValue = (*trainingData).
       getPoint((*splittingSampleIndex)[j], currentFeature);
-    double currentYValue = (*trainingData).
+    float currentYValue = (*trainingData).
       getOutcomePoint((*splittingSampleIndex)[j]);
     splittingCategoryCount[currentXValue] += 1;
     splittingCategoryYSum[currentXValue] += currentYValue;
   }
 
   for (size_t j=0; j<(*averagingSampleIndex).size(); j++) {
-    double currentXValue = (*trainingData).
+    float currentXValue = (*trainingData).
       getPoint((*averagingSampleIndex)[j], currentFeature);
     averagingCategoryCount[currentXValue] += 1;
   }
 
   // Go through the sums and determine the best partition
   for (
-    std::set<double>::iterator it=all_categories.begin();
+    std::set<float>::iterator it=all_categories.begin();
     it != all_categories.end();
     ++it
     ) {
@@ -453,12 +451,12 @@ void findBestSplitValueCategorical(
       continue;
     }
 
-    double leftPartitionMean = splittingCategoryYSum[*it] /
+    float leftPartitionMean = splittingCategoryYSum[*it] /
                                splittingCategoryCount[*it];
-    double rightPartitionMean = (splitTotalSum -
+    float rightPartitionMean = (splitTotalSum -
                                  splittingCategoryYSum[*it]) /
                                 (splitTotalCount - splittingCategoryCount[*it]);
-    double currentSplitLoss = splittingCategoryCount[*it] *
+    float currentSplitLoss = splittingCategoryCount[*it] *
                               leftPartitionMean * leftPartitionMean +
                               (splitTotalCount - splittingCategoryCount[*it]) *
                               rightPartitionMean * rightPartitionMean;
@@ -483,8 +481,8 @@ void findBestSplitValueNonCategorical(
   std::vector<size_t>* splittingSampleIndex,
   size_t bestSplitTableIndex,
   size_t currentFeature,
-  double* bestSplitLossAll,
-  double* bestSplitValueAll,
+  float* bestSplitLossAll,
+  float* bestSplitValueAll,
   size_t* bestSplitFeatureAll,
   size_t* bestSplitCountAll,
   DataFrame* trainingData,
@@ -495,15 +493,15 @@ void findBestSplitValueNonCategorical(
 ) {
 
   // Create specific vectors to holddata
-  typedef std::tuple<double,double> dataPair;
+  typedef std::tuple<float,float> dataPair;
   std::vector<dataPair> splittingData;
   std::vector<dataPair> averagingData;
-  double splitTotalSum = 0;
+  float splitTotalSum = 0;
   for (size_t j=0; j<(*splittingSampleIndex).size(); j++){
     // Retrieve the current feature value
-    double tmpFeatureValue = (*trainingData).
+    float tmpFeatureValue = (*trainingData).
       getPoint((*splittingSampleIndex)[j], currentFeature);
-    double tmpOutcomeValue = (*trainingData).
+    float tmpOutcomeValue = (*trainingData).
       getOutcomePoint((*splittingSampleIndex)[j]);
     splitTotalSum += tmpOutcomeValue;
 
@@ -518,9 +516,9 @@ void findBestSplitValueNonCategorical(
 
   for (size_t j=0; j<(*averagingSampleIndex).size(); j++){
     // Retrieve the current feature value
-    double tmpFeatureValue = (*trainingData).
+    float tmpFeatureValue = (*trainingData).
       getPoint((*averagingSampleIndex)[j], currentFeature);
-    double tmpOutcomeValue = (*trainingData).
+    float tmpOutcomeValue = (*trainingData).
       getOutcomePoint((*averagingSampleIndex)[j]);
 
     // Adding data to the internal data vector (Note: R index)
@@ -553,18 +551,18 @@ void findBestSplitValueNonCategorical(
   size_t splitTotalCount = splittingData.size();
   size_t averageTotalCount = averagingData.size();
 
-  double splitLeftPartitionRunningSum = 0;
+  float splitLeftPartitionRunningSum = 0;
 
   std::vector<dataPair>::iterator splittingDataIter = splittingData.begin();
   std::vector<dataPair>::iterator averagingDataIter = averagingData.begin();
 
   // Initialize the split value to be minimum of first value in two datsets
-  double featureValue = std::min(
+  float featureValue = std::min(
     std::get<0>(*splittingDataIter),
     std::get<0>(*averagingDataIter)
   );
 
-  double newFeatureValue;
+  float newFeatureValue;
   bool oneValueDistinctFlag = true;
 
   while (
@@ -639,24 +637,24 @@ void findBestSplitValueNonCategorical(
     }
 
     // Calculate sample mean in both splitting partitions
-    double leftPartitionMean =
+    float leftPartitionMean =
       splitLeftPartitionRunningSum / splitLeftPartitionCount;
-    double rightPartitionMean =
+    float rightPartitionMean =
       (splitTotalSum - splitLeftPartitionRunningSum)
       / (splitTotalCount - splitLeftPartitionCount);
 
     // Calculate the variance of the splitting
-    double muBarSquareSum =
+    float muBarSquareSum =
       splitLeftPartitionCount * leftPartitionMean * leftPartitionMean +
       (splitTotalCount - splitLeftPartitionCount) * rightPartitionMean
       * rightPartitionMean;
 
-    double currentSplitValue;
+    float currentSplitValue;
     if (splitMiddle) {
       currentSplitValue = (newFeatureValue + featureValue) / 2.0;
     } else {
-      std::uniform_real_distribution<double> unif_dist;
-      double tmp_random = unif_dist(random_number_generator);
+      std::uniform_real_distribution<float> unif_dist;
+      float tmp_random = unif_dist(random_number_generator);
       currentSplitValue =
         tmp_random * (newFeatureValue - featureValue) + featureValue;
     }
@@ -680,18 +678,18 @@ void findBestSplitValueNonCategorical(
 
 void determineBestSplit(
   size_t &bestSplitFeature,
-  double &bestSplitValue,
-  double &bestSplitLoss,
+  float &bestSplitValue,
+  float &bestSplitLoss,
   size_t mtry,
-  double* bestSplitLossAll,
-  double* bestSplitValueAll,
+  float* bestSplitLossAll,
+  float* bestSplitValueAll,
   size_t* bestSplitFeatureAll,
   size_t* bestSplitCountAll,
   std::mt19937_64& random_number_generator
 ){
 
   // Get the best split values among all features
-  double bestSplitLoss_ = -std::numeric_limits<double>::infinity();
+  float bestSplitLoss_ = -std::numeric_limits<float>::infinity();
   std::vector<size_t> bestFeatures;
 
   for (size_t i=0; i<mtry; i++) {
@@ -725,8 +723,8 @@ void determineBestSplit(
   } else {
     // If none of the features are possible, return NA
     bestSplitFeature = std::numeric_limits<size_t>::quiet_NaN();
-    bestSplitValue = std::numeric_limits<double>::quiet_NaN();
-    bestSplitLoss = std::numeric_limits<double>::quiet_NaN();
+    bestSplitValue = std::numeric_limits<float>::quiet_NaN();
+    bestSplitLoss = std::numeric_limits<float>::quiet_NaN();
   }
 
 }
@@ -734,8 +732,8 @@ void determineBestSplit(
 
 void honestRFTree::selectBestFeature(
   size_t &bestSplitFeature,
-  double &bestSplitValue,
-  double &bestSplitLoss,
+  float &bestSplitValue,
+  float &bestSplitLoss,
   std::vector<size_t>* featureList,
   std::vector<size_t>* averagingSampleIndex,
   std::vector<size_t>* splittingSampleIndex,
@@ -748,13 +746,13 @@ void honestRFTree::selectBestFeature(
   size_t mtry = (*featureList).size();
 
   // Initialize the minimum loss for each feature
-  double* bestSplitLossAll = new double[mtry];
-  double* bestSplitValueAll = new double[mtry];
+  float* bestSplitLossAll = new float[mtry];
+  float* bestSplitValueAll = new float[mtry];
   size_t* bestSplitFeatureAll = new size_t[mtry];
   size_t* bestSplitCountAll = new size_t[mtry];
   for (size_t i=0; i<mtry; i++) {
-    bestSplitLossAll[i] = -std::numeric_limits<double>::infinity();
-    bestSplitValueAll[i] = std::numeric_limits<double>::quiet_NaN();
+    bestSplitLossAll[i] = -std::numeric_limits<float>::infinity();
+    bestSplitValueAll[i] = std::numeric_limits<float>::quiet_NaN();
     bestSplitFeatureAll[i] = std::numeric_limits<size_t>::quiet_NaN();
     bestSplitCountAll[i] = 0;
   }
@@ -889,7 +887,7 @@ void honestRFTree::getOOBindex(
 }
 
 void honestRFTree::getOOBPrediction(
-  std::vector<double> &outputOOBPrediction,
+  std::vector<float> &outputOOBPrediction,
   std::vector<size_t> &outputOOBCount,
   DataFrame* trainingData
 ){
@@ -906,13 +904,13 @@ void honestRFTree::getOOBPrediction(
     size_t OOBSampleIndex = *it;
 
     // Predict current oob sample
-    std::vector<double> currentTreePrediction(1);
-    std::vector<double> OOBSampleObservation((*trainingData).getNumColumns());
+    std::vector<float> currentTreePrediction(1);
+    std::vector<float> OOBSampleObservation((*trainingData).getNumColumns());
     (*trainingData).getObservationData(OOBSampleObservation, OOBSampleIndex);
 
-    std::vector< std::vector<double> > OOBSampleObservation_;
+    std::vector< std::vector<float> > OOBSampleObservation_;
     for (size_t k=0; k<(*trainingData).getNumColumns(); k++){
-      std::vector<double> OOBSampleObservation_iter(1);
+      std::vector<float> OOBSampleObservation_iter(1);
       OOBSampleObservation_iter[0] = OOBSampleObservation[k];
       OOBSampleObservation_.push_back(OOBSampleObservation_iter);
     }

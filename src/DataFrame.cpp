@@ -9,8 +9,8 @@ DataFrame::~DataFrame() {
 }
 
 DataFrame::DataFrame(
-  std::unique_ptr< std::vector< std::vector<double> > > featureData,
-  std::unique_ptr< std::vector<double> > outcomeData,
+  std::unique_ptr< std::vector< std::vector<float> > > featureData,
+  std::unique_ptr< std::vector<float> > outcomeData,
   std::unique_ptr< std::vector<size_t> > categoricalFeatureCols,
   std::size_t numRows,
   std::size_t numColumns
@@ -22,7 +22,7 @@ DataFrame::DataFrame(
   this->_numColumns = numColumns;
 }
 
-double DataFrame::getPoint(size_t rowIndex, size_t colIndex) {
+float DataFrame::getPoint(size_t rowIndex, size_t colIndex) {
   // Check if rowIndex and colIndex are valid
   if (rowIndex < getNumRows() && colIndex < getNumColumns()) {
     return (*getAllFeatureData())[colIndex][rowIndex];
@@ -31,7 +31,7 @@ double DataFrame::getPoint(size_t rowIndex, size_t colIndex) {
   }
 }
 
-double DataFrame::getOutcomePoint(size_t rowIndex) {
+float DataFrame::getOutcomePoint(size_t rowIndex) {
   // Check if rowIndex is valid
   if (rowIndex < getNumRows()) {
     return (*getOutcomeData())[rowIndex];
@@ -40,7 +40,7 @@ double DataFrame::getOutcomePoint(size_t rowIndex) {
   }
 }
 
-std::vector<double>* DataFrame::getFeatureData(
+std::vector<float>* DataFrame::getFeatureData(
   size_t colIndex
 ) {
   if (colIndex < getNumColumns()) {
@@ -51,7 +51,7 @@ std::vector<double>* DataFrame::getFeatureData(
 }
 
 void DataFrame::getObservationData(
-  std::vector<double> &rowData,
+  std::vector<float> &rowData,
   size_t rowIndex
 ) {
   if (rowIndex < getNumRows()) {
@@ -63,11 +63,11 @@ void DataFrame::getObservationData(
   }
 }
 
-double DataFrame::partitionMean(
+float DataFrame::partitionMean(
   std::vector<size_t>* sampleIndex
 ){
   size_t totalSampleSize = (*sampleIndex).size();
-  double accummulatedSum = 0;
+  float accummulatedSum = 0;
   for (
     std::vector<size_t>::iterator it = (*sampleIndex).begin();
     it != (*sampleIndex).end();

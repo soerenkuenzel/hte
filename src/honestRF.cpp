@@ -25,7 +25,7 @@ honestRF::honestRF(
   size_t ntree,
   bool replace,
   size_t sampSize,
-  double splitRatio,
+  float splitRatio,
   size_t mtry,
   size_t nodeSizeSpt,
   size_t nodeSizeAvg,
@@ -229,11 +229,11 @@ void honestRF::addTrees(size_t ntree) {
   #endif
 }
 
-std::unique_ptr< std::vector<double> > honestRF::predict(
-  std::vector< std::vector<double> >* xNew
+std::unique_ptr< std::vector<float> > honestRF::predict(
+  std::vector< std::vector<float> >* xNew
 ){
 
-  std::vector<double> prediction;
+  std::vector<float> prediction;
   size_t numObservations = (*xNew)[0].size();
   for (size_t j=0; j<numObservations; j++) {
     prediction.push_back(0);
@@ -268,7 +268,7 @@ std::unique_ptr< std::vector<double> > honestRF::predict(
   for(int i=0; i<((int) getNtree()); i++ ) {
   #endif
           try {
-            std::vector<double> currentTreePrediction(numObservations);
+            std::vector<float> currentTreePrediction(numObservations);
             honestRFTree *currentTree = (*getForest())[i].get();
             (*currentTree).predict(
               currentTreePrediction,
@@ -310,8 +310,8 @@ std::unique_ptr< std::vector<double> > honestRF::predict(
     prediction[j] /= getNtree();
   }
 
-  std::unique_ptr< std::vector<double> > prediction_ (
-    new std::vector<double>(prediction)
+  std::unique_ptr< std::vector<float> > prediction_ (
+    new std::vector<float>(prediction)
   );
 
   return prediction_;
@@ -321,7 +321,7 @@ void honestRF::calculateOOBError() {
 
   size_t numObservations = getTrainingData()->getNumRows();
 
-  std::vector<double> outputOOBPrediction(numObservations);
+  std::vector<float> outputOOBPrediction(numObservations);
   std::vector<size_t> outputOOBCount(numObservations);
 
   for (size_t i=0; i<numObservations; i++) {
@@ -356,7 +356,7 @@ void honestRF::calculateOOBError() {
   for(int i=0; i<((int) getNtree()); i++ ) {
   #endif
           try {
-            std::vector<double> outputOOBPrediction_iteration(numObservations);
+            std::vector<float> outputOOBPrediction_iteration(numObservations);
             std::vector<size_t> outputOOBCount_iteration(numObservations);
             for (size_t j=0; j<numObservations; j++) {
               outputOOBPrediction_iteration[j] = 0;
@@ -400,9 +400,9 @@ void honestRF::calculateOOBError() {
   );
   #endif
 
-  double OOB_MSE = 0;
+  float OOB_MSE = 0;
   for (size_t j=0; j<numObservations; j++){
-    double trueValue = getTrainingData()->getOutcomePoint(j);
+    float trueValue = getTrainingData()->getOutcomePoint(j);
     if (outputOOBCount[j] != 0) {
       OOB_MSE +=
         pow(trueValue - outputOOBPrediction[j] / outputOOBCount[j], 2);

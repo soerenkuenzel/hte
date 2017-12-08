@@ -1,5 +1,5 @@
-#ifndef HTECPP_RFNODE_H
-#define HTECPP_RFNODE_H
+#ifndef FORESTRYCPP_RFNODE_H
+#define FORESTRYCPP_RFNODE_H
 
 #include <iostream>
 #include <vector>
@@ -21,7 +21,7 @@ public:
 
   RFNode(
     size_t splitFeature,
-    double splitValue,
+    float splitValue,
     std::unique_ptr< RFNode > leftChild,
     std::unique_ptr< RFNode > rightChild
   );
@@ -33,15 +33,15 @@ public:
 
   void setSplitNode(
     size_t splitFeature,
-    double splitValue,
+    float splitValue,
     std::unique_ptr< RFNode > leftChild,
     std::unique_ptr< RFNode > rightChild
   );
 
   void predict(
-    std::vector<double> &outputPrediction,
+    std::vector<float> &outputPrediction,
     std::vector<size_t>* updateIndex,
-    std::vector< std::vector<double> >* xNew,
+    std::vector< std::vector<float> >* xNew,
     DataFrame* trainingData
   );
 
@@ -57,7 +57,7 @@ public:
     }
   }
 
-  double getSplitValue() {
+  float getSplitValue() {
     if (is_leaf()) {
       throw "Cannot get split feature for a leaf.";
     } else {
@@ -97,7 +97,7 @@ private:
   std::unique_ptr< std::vector<size_t> > _averagingSampleIndex;
   std::unique_ptr< std::vector<size_t> > _splittingSampleIndex;
   size_t _splitFeature;
-  double _splitValue;
+  float _splitValue;
   std::unique_ptr< RFNode > _leftChild;
   std::unique_ptr< RFNode > _rightChild;
   size_t _averageCount;
@@ -105,4 +105,4 @@ private:
 };
 
 
-#endif //HTECPP_RFNODE_H
+#endif //FORESTRYCPP_RFNODE_H
