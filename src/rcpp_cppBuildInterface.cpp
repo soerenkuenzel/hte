@@ -25,15 +25,15 @@ SEXP rcpp_cppDataFrameInterface(
 ){
 
   try {
-    std::unique_ptr<std::vector< std::vector<float> > > featureDataRcpp (
-        new std::vector< std::vector<float> >(
-            Rcpp::as< std::vector< std::vector<float> > >(x)
+    std::unique_ptr<std::vector< std::vector<double> > > featureDataRcpp (
+        new std::vector< std::vector<double> >(
+            Rcpp::as< std::vector< std::vector<double> > >(x)
         )
     );
 
-    std::unique_ptr<std::vector<float>> outcomeDataRcpp (
-        new std::vector<float>(
-            Rcpp::as< std::vector<float> >(y)
+    std::unique_ptr<std::vector<double>> outcomeDataRcpp (
+        new std::vector<double>(
+            Rcpp::as< std::vector<double> >(y)
         )
     );
 
@@ -74,7 +74,7 @@ SEXP rcpp_cppBuildInterface(
   bool replace,
   int sampsize,
   int mtry,
-  float splitratio,
+  double splitratio,
   int nodesizeSpl,
   int nodesizeAvg,
   int seed,
@@ -122,15 +122,15 @@ SEXP rcpp_cppBuildInterface(
   } else {
 
     try {
-      std::unique_ptr<std::vector< std::vector<float> > > featureDataRcpp (
-          new std::vector< std::vector<float> >(
-              Rcpp::as< std::vector< std::vector<float> > >(x)
+      std::unique_ptr<std::vector< std::vector<double> > > featureDataRcpp (
+          new std::vector< std::vector<double> >(
+              Rcpp::as< std::vector< std::vector<double> > >(x)
           )
       );
 
-      std::unique_ptr<std::vector<float>> outcomeDataRcpp (
-          new std::vector<float>(
-              Rcpp::as< std::vector<float> >(y)
+      std::unique_ptr<std::vector<double>> outcomeDataRcpp (
+          new std::vector<double>(
+              Rcpp::as< std::vector<double> >(y)
           )
       );
 
@@ -191,15 +191,15 @@ Rcpp::NumericVector rcpp_cppPredictInterface(
 
     Rcpp::XPtr< honestRF > testFullForest(forest) ;
 
-    std::vector< std::vector<float> > featureData =
-      Rcpp::as< std::vector< std::vector<float> > >(x);
+    std::vector< std::vector<double> > featureData =
+      Rcpp::as< std::vector< std::vector<double> > >(x);
 
-    std::unique_ptr< std::vector<float> > testForestPrediction (
+    std::unique_ptr< std::vector<double> > testForestPrediction (
       (*testFullForest).predict(&featureData)
     );
 
-    std::vector<float>* testForestPrediction_ =
-      new std::vector<float>(*testForestPrediction.get());
+    std::vector<double>* testForestPrediction_ =
+      new std::vector<double>(*testForestPrediction.get());
 
     Rcpp::NumericVector output = Rcpp::wrap(*testForestPrediction_);
 
@@ -215,13 +215,13 @@ Rcpp::NumericVector rcpp_cppPredictInterface(
 
 
 // [[Rcpp::export]]
-float rcpp_OBBPredictInterface(
+double rcpp_OBBPredictInterface(
     SEXP forest
 ){
 
   try {
     Rcpp::XPtr< honestRF > testFullForest(forest) ;
-    float OOBError = (*testFullForest).getOOBError();
+    double OOBError = (*testFullForest).getOOBError();
     return OOBError;
   } catch(std::runtime_error const& err) {
     forward_exception_to_r(err);
@@ -233,13 +233,13 @@ float rcpp_OBBPredictInterface(
 
 
 // [[Rcpp::export]]
-float rcpp_getObservationSizeInterface(
+double rcpp_getObservationSizeInterface(
     SEXP df
 ){
 
   try {
     Rcpp::XPtr< DataFrame > trainingData(df) ;
-    float nrows = (float) (*trainingData).getNumRows();
+    double nrows = (double) (*trainingData).getNumRows();
     return nrows;
   } catch(std::runtime_error const& err) {
     forward_exception_to_r(err);

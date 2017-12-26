@@ -1,5 +1,5 @@
-#ifndef FORESTRYCPP_RF_H
-#define FORESTRYCPP_RF_H
+#ifndef HTECPP_RF_H
+#define HTECPP_RF_H
 
 #include <iostream>
 #include <vector>
@@ -18,7 +18,7 @@ public:
     size_t ntree,
     bool replace,
     size_t sampSize,
-    float splitRatio,
+    double splitRatio,
     size_t mtry,
     size_t nodeSizeSpt,
     size_t nodeSizeAvg,
@@ -28,13 +28,13 @@ public:
     bool splitMiddle
   );
 
-  std::unique_ptr< std::vector<float> > predict(
-    std::vector< std::vector<float> >* xNew
+  std::unique_ptr< std::vector<double> > predict(
+    std::vector< std::vector<double> >* xNew
   );
 
   void calculateOOBError();
 
-  float getOOBError() {
+  double getOOBError() {
     calculateOOBError();
     return _OOBError;
   }
@@ -65,7 +65,7 @@ public:
     return _sampSize;
   }
 
-  float getSplitRatio() {
+  double getSplitRatio() {
     return _splitRatio;
   }
 
@@ -98,7 +98,7 @@ private:
   size_t _ntree;
   bool _replace;
   size_t _sampSize;
-  float _splitRatio;
+  double _splitRatio;
   size_t _mtry;
   size_t _nodeSizeSpt;
   size_t _nodeSizeAvg;
@@ -106,8 +106,8 @@ private:
   unsigned int _seed;
   bool _verbose;
   size_t _nthread;
-  float _OOBError;
+  double _OOBError;
   bool _splitMiddle;
 };
 
-#endif //FORESTRYCPP_RF_H
+#endif //HTECPP_RF_H

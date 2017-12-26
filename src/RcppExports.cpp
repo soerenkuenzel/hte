@@ -7,7 +7,7 @@ using namespace Rcpp;
 
 // rcpp_cppDataFrameInterface
 SEXP rcpp_cppDataFrameInterface(Rcpp::List x, Rcpp::NumericVector y, Rcpp::NumericVector catCols, int numRows, int numColumns);
-RcppExport SEXP hte_rcpp_cppDataFrameInterface(SEXP xSEXP, SEXP ySEXP, SEXP catColsSEXP, SEXP numRowsSEXP, SEXP numColumnsSEXP) {
+RcppExport SEXP _hte_rcpp_cppDataFrameInterface(SEXP xSEXP, SEXP ySEXP, SEXP catColsSEXP, SEXP numRowsSEXP, SEXP numColumnsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -21,8 +21,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // rcpp_cppBuildInterface
-SEXP rcpp_cppBuildInterface(Rcpp::List x, Rcpp::NumericVector y, Rcpp::NumericVector catCols, int numRows, int numColumns, int ntree, bool replace, int sampsize, int mtry, float splitratio, int nodesizeSpl, int nodesizeAvg, int seed, int nthread, bool verbose, bool middleSplit, bool existing_dataframe_flag, SEXP existing_dataframe);
-RcppExport SEXP hte_rcpp_cppBuildInterface(SEXP xSEXP, SEXP ySEXP, SEXP catColsSEXP, SEXP numRowsSEXP, SEXP numColumnsSEXP, SEXP ntreeSEXP, SEXP replaceSEXP, SEXP sampsizeSEXP, SEXP mtrySEXP, SEXP splitratioSEXP, SEXP nodesizeSplSEXP, SEXP nodesizeAvgSEXP, SEXP seedSEXP, SEXP nthreadSEXP, SEXP verboseSEXP, SEXP middleSplitSEXP, SEXP existing_dataframe_flagSEXP, SEXP existing_dataframeSEXP) {
+SEXP rcpp_cppBuildInterface(Rcpp::List x, Rcpp::NumericVector y, Rcpp::NumericVector catCols, int numRows, int numColumns, int ntree, bool replace, int sampsize, int mtry, double splitratio, int nodesizeSpl, int nodesizeAvg, int seed, int nthread, bool verbose, bool middleSplit, bool existing_dataframe_flag, SEXP existing_dataframe);
+RcppExport SEXP _hte_rcpp_cppBuildInterface(SEXP xSEXP, SEXP ySEXP, SEXP catColsSEXP, SEXP numRowsSEXP, SEXP numColumnsSEXP, SEXP ntreeSEXP, SEXP replaceSEXP, SEXP sampsizeSEXP, SEXP mtrySEXP, SEXP splitratioSEXP, SEXP nodesizeSplSEXP, SEXP nodesizeAvgSEXP, SEXP seedSEXP, SEXP nthreadSEXP, SEXP verboseSEXP, SEXP middleSplitSEXP, SEXP existing_dataframe_flagSEXP, SEXP existing_dataframeSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -35,7 +35,7 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< bool >::type replace(replaceSEXP);
     Rcpp::traits::input_parameter< int >::type sampsize(sampsizeSEXP);
     Rcpp::traits::input_parameter< int >::type mtry(mtrySEXP);
-    Rcpp::traits::input_parameter< float >::type splitratio(splitratioSEXP);
+    Rcpp::traits::input_parameter< double >::type splitratio(splitratioSEXP);
     Rcpp::traits::input_parameter< int >::type nodesizeSpl(nodesizeSplSEXP);
     Rcpp::traits::input_parameter< int >::type nodesizeAvg(nodesizeAvgSEXP);
     Rcpp::traits::input_parameter< int >::type seed(seedSEXP);
@@ -50,7 +50,7 @@ END_RCPP
 }
 // rcpp_cppPredictInterface
 Rcpp::NumericVector rcpp_cppPredictInterface(SEXP forest, Rcpp::List x);
-RcppExport SEXP hte_rcpp_cppPredictInterface(SEXP forestSEXP, SEXP xSEXP) {
+RcppExport SEXP _hte_rcpp_cppPredictInterface(SEXP forestSEXP, SEXP xSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -61,8 +61,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // rcpp_OBBPredictInterface
-float rcpp_OBBPredictInterface(SEXP forest);
-RcppExport SEXP hte_rcpp_OBBPredictInterface(SEXP forestSEXP) {
+double rcpp_OBBPredictInterface(SEXP forest);
+RcppExport SEXP _hte_rcpp_OBBPredictInterface(SEXP forestSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -72,8 +72,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // rcpp_getObservationSizeInterface
-float rcpp_getObservationSizeInterface(SEXP df);
-RcppExport SEXP hte_rcpp_getObservationSizeInterface(SEXP dfSEXP) {
+double rcpp_getObservationSizeInterface(SEXP df);
+RcppExport SEXP _hte_rcpp_getObservationSizeInterface(SEXP dfSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -84,7 +84,7 @@ END_RCPP
 }
 // rcpp_AddTreeInterface
 void rcpp_AddTreeInterface(SEXP forest, int ntree);
-RcppExport SEXP hte_rcpp_AddTreeInterface(SEXP forestSEXP, SEXP ntreeSEXP) {
+RcppExport SEXP _hte_rcpp_AddTreeInterface(SEXP forestSEXP, SEXP ntreeSEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< SEXP >::type forest(forestSEXP);
@@ -95,7 +95,7 @@ END_RCPP
 }
 // rcpp_selectBestFeature
 List rcpp_selectBestFeature(DataFrame x, NumericVector y, List featureList, List sampleIndex, List nodesize, std::string splitrule, List categoricalFeatureCols);
-RcppExport SEXP hte_rcpp_selectBestFeature(SEXP xSEXP, SEXP ySEXP, SEXP featureListSEXP, SEXP sampleIndexSEXP, SEXP nodesizeSEXP, SEXP splitruleSEXP, SEXP categoricalFeatureColsSEXP) {
+RcppExport SEXP _hte_rcpp_selectBestFeature(SEXP xSEXP, SEXP ySEXP, SEXP featureListSEXP, SEXP sampleIndexSEXP, SEXP nodesizeSEXP, SEXP splitruleSEXP, SEXP categoricalFeatureColsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -112,7 +112,7 @@ END_RCPP
 }
 // test_rnd
 double test_rnd();
-RcppExport SEXP hte_test_rnd() {
+RcppExport SEXP _hte_test_rnd() {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -122,7 +122,7 @@ END_RCPP
 }
 // test_rnd2
 NumericVector test_rnd2();
-RcppExport SEXP hte_test_rnd2() {
+RcppExport SEXP _hte_test_rnd2() {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -132,15 +132,15 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"hte_rcpp_cppDataFrameInterface", (DL_FUNC) &hte_rcpp_cppDataFrameInterface, 5},
-    {"hte_rcpp_cppBuildInterface", (DL_FUNC) &hte_rcpp_cppBuildInterface, 18},
-    {"hte_rcpp_cppPredictInterface", (DL_FUNC) &hte_rcpp_cppPredictInterface, 2},
-    {"hte_rcpp_OBBPredictInterface", (DL_FUNC) &hte_rcpp_OBBPredictInterface, 1},
-    {"hte_rcpp_getObservationSizeInterface", (DL_FUNC) &hte_rcpp_getObservationSizeInterface, 1},
-    {"hte_rcpp_AddTreeInterface", (DL_FUNC) &hte_rcpp_AddTreeInterface, 2},
-    {"hte_rcpp_selectBestFeature", (DL_FUNC) &hte_rcpp_selectBestFeature, 7},
-    {"hte_test_rnd", (DL_FUNC) &hte_test_rnd, 0},
-    {"hte_test_rnd2", (DL_FUNC) &hte_test_rnd2, 0},
+    {"_hte_rcpp_cppDataFrameInterface", (DL_FUNC) &_hte_rcpp_cppDataFrameInterface, 5},
+    {"_hte_rcpp_cppBuildInterface", (DL_FUNC) &_hte_rcpp_cppBuildInterface, 18},
+    {"_hte_rcpp_cppPredictInterface", (DL_FUNC) &_hte_rcpp_cppPredictInterface, 2},
+    {"_hte_rcpp_OBBPredictInterface", (DL_FUNC) &_hte_rcpp_OBBPredictInterface, 1},
+    {"_hte_rcpp_getObservationSizeInterface", (DL_FUNC) &_hte_rcpp_getObservationSizeInterface, 1},
+    {"_hte_rcpp_AddTreeInterface", (DL_FUNC) &_hte_rcpp_AddTreeInterface, 2},
+    {"_hte_rcpp_selectBestFeature", (DL_FUNC) &_hte_rcpp_selectBestFeature, 7},
+    {"_hte_test_rnd", (DL_FUNC) &_hte_test_rnd, 0},
+    {"_hte_test_rnd2", (DL_FUNC) &_hte_test_rnd2, 0},
     {NULL, NULL, 0}
 };
 

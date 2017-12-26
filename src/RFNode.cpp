@@ -30,7 +30,7 @@ RFNode::RFNode(
 
 RFNode::RFNode(
   size_t splitFeature,
-  float splitValue,
+  double splitValue,
   std::unique_ptr< RFNode > leftChild,
   std::unique_ptr< RFNode > rightChild
 ) {
@@ -57,7 +57,7 @@ void RFNode::setLeafNode(
 
 void RFNode::setSplitNode(
   size_t splitFeature,
-  float splitValue,
+  double splitValue,
   std::unique_ptr< RFNode > leftChild,
   std::unique_ptr< RFNode > rightChild
 ) {
@@ -73,9 +73,9 @@ void RFNode::setSplitNode(
 
 
 void RFNode::predict(
-  std::vector<float> &outputPrediction,
+  std::vector<double> &outputPrediction,
   std::vector<size_t>* updateIndex,
-  std::vector< std::vector<float> >* xNew,
+  std::vector< std::vector<double> >* xNew,
   DataFrame* trainingData
 ) {
 
@@ -83,7 +83,7 @@ void RFNode::predict(
   if (is_leaf()) {
 
     // Calculate the mean of current node
-    float predictedMean = (*trainingData).partitionMean(getAveragingIndex());
+    double predictedMean = (*trainingData).partitionMean(getAveragingIndex());
 
     // Give all updateIndex the mean of the node as prediction values
     for (

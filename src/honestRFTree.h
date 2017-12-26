@@ -1,5 +1,5 @@
-#ifndef FORESTRYCPP_RFTREE_H
-#define FORESTRYCPP_RFTREE_H
+#ifndef HTECPP_RFTREE_H
+#define HTECPP_RFTREE_H
 
 #include <iostream>
 #include <vector>
@@ -35,8 +35,8 @@ public:
   );
 
   void predict(
-    std::vector<float> &outputPrediction,
-    std::vector< std::vector<float> >* xNew,
+    std::vector<double> &outputPrediction,
+    std::vector< std::vector<double> >* xNew,
     DataFrame* trainingData
   );
 
@@ -51,8 +51,8 @@ public:
 
   void selectBestFeature(
     size_t& bestSplitFeature,
-    float& bestSplitValue,
-    float& bestSplitLoss,
+    double& bestSplitValue,
+    double& bestSplitLoss,
     std::vector<size_t>* featureList,
     std::vector<size_t>* averagingSampleIndex,
     std::vector<size_t>* splittingSampleIndex,
@@ -69,7 +69,7 @@ public:
   );
 
   void getOOBPrediction(
-    std::vector<float> &outputOOBPrediction,
+    std::vector<double> &outputOOBPrediction,
     std::vector<size_t> &outputOOBCount,
     DataFrame* trainingData
   );
@@ -108,4 +108,4 @@ private:
 };
 
 
-#endif //FORESTRYCPP_RFTREE_H
+#endif //HTECPP_RFTREE_H
