@@ -21,22 +21,43 @@ This example will not execute because there is no data.
 library(hte)
 packageVersion("hte")
 
-#create the hte object using honest Random Forests (RF)
+# create example data set
+simulated_experiment <- simulate_causal_experiment(
+ntrain = 1000,
+ntest = 1000,
+dim = 10,
+setup = "complexTau",
+testseed = 293901,
+trainseed = 307017
+)
+feature_train <- simulated_experiment$feat_tr
+w_train <- simulated_experiment$W_tr
+yobs_train <- simulated_experiment$Yobs_tr
 
-xl <- X_RF(feat = X.train, tr = Tr.train, yobs = Y.train)
+# create the hte object using honest Random Forests (RF)
+xl_rf <- X_RF(feat = feature_train, tr = w_train, yobs = yobs_train)
 
-#alternatively, use BART instead of honest Random Forests. 
-#If you are not going to be careful about hyperparemeter tuning,
-#we suggest using BART. 
+# alternatively, use BART instead of honest Random Forests. If you are not going
+# to be careful about hyperparemeter tuning, we suggest using BART.
+xl_bart <- X_BART(feat = feature_train, tr = w_train, yobs = yobs_train)
 
-xl <- X_BART(feat = X.train, tr = Tr.train, yobs = Y.train)
+# estimate the CATE
+feature_test <- simulated_experiment$feat_te
 
-#estimate the CATE
-xl.cate <- EstimateCate(xl, X.test)
+cate_esti_rf <- EstimateCate(xl_rf, feature_test)
+cate_esti_bart <- EstimateCate(xl_bart, feature_test)
 
-#Create confidence intervals via bootstrapping. Note thayt honest Random Forests have theoretically
-#valid CIs, BART does not. However, BART often performs well for prediction without extensive
-#tuning. See our paper.
+# evaluate the performance
+cate_true <- simulated_experiment$tau_te
+mean((cate_esti_rf - cate_true) ^ 2)
+mean((cate_esti_bart - cate_true) ^ 2)
 
-xl_ci <- CateCI(xl, X, B=500)
+# Create confidence intervals via bootstrapping. Note that honest Random
+# Forests have theoretically valid CIs, BART does not. However, BART often
+# performs well for prediction without extensive tuning. See our paper
+# (https://arxiv.org/abs/1706.03461)
+
+# do not run (takes a long time)
+xl_ci_rf <- CateCI(xl_rf, feature_test, B = 500)
+xl_ci_bart <- CateCI(xl_bart, feature_test, B = 500)
 ```
