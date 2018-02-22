@@ -33,7 +33,8 @@ X_BART <-
            ensemble = "pscore",
            ndpost = 1200,
            tree_package = "dbarts",
-           ntree = 200) {
+           ntree = 200,
+           nthread = 1) {
     feat <- as.data.frame(feat)
 
     if (tree_package == "dbarts") {
