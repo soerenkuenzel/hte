@@ -24,6 +24,7 @@ setClass(
 #' @param tr treatment assignment 0 for control and 1 for treatment.
 #' @param yobs the observed outcome.
 #' @param verbose TRUE for detailed output FALSE for no output
+#' @param nthread number of threats to be used when predicting the CATE
 #' @return A `X_RF` object.
 #' @export X_BART
 X_BART <-
@@ -66,7 +67,8 @@ X_BART <-
                ensemble = ensemble,
                ndpost = ndpost,
                tree_package = tree_package,
-               ntree = ntree)
+               ntree = ntree,
+               nthread = nthread)
       }
     )
   }
