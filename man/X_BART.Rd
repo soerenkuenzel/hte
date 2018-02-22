@@ -5,7 +5,7 @@
 \title{X_BART}
 \usage{
 X_BART(feat, tr, yobs, ensemble = "pscore", ndpost = 1200,
-  tree_package = "dbarts", ntree = 200)
+  tree_package = "dbarts", ntree = 200, nthread = 1)
 }
 \arguments{
 \item{feat}{feature data.frame.}
@@ -13,6 +13,8 @@ X_BART(feat, tr, yobs, ensemble = "pscore", ndpost = 1200,
 \item{tr}{treatment assignment 0 for control and 1 for treatment.}
 
 \item{yobs}{the observed outcome.}
+
+\item{nthread}{number of threats to be used when predicting the CATE}
 
 \item{verbose}{TRUE for detailed output FALSE for no output}
 }
