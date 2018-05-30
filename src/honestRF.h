@@ -4,6 +4,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <functional>
 #include "DataFrame.h"
 #include "honestRFTree.h"
 
