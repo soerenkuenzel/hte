@@ -1,3 +1,0 @@
-sbatch Rand_TuneS.sh
-
-sbatch -p high Rand_TuneS.sh

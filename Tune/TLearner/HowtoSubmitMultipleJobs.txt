@@ -1,1 +1,0 @@
-sbatch Rand_TuneT.sh
